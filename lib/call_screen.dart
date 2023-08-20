@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:aitest/controller/record_controller.dart';
 import 'package:aitest/main.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'dial/dial_button.dart';
 import 'package:http/http.dart' as http;
+import 'package:audioplayers/audioplayers.dart' as audio;
 
 class CallScreen extends StatefulWidget {
   final Function() onPressed;
@@ -185,6 +185,7 @@ class _CallScreenState extends State<CallScreen> {
         Map data = jsonDecode(response.body);
         if (data["success"] == true) {
           phishingCount = data["result"];
+          playAlertSound(phishingCount);
         }
       }
     } catch (error) {
@@ -193,5 +194,17 @@ class _CallScreenState extends State<CallScreen> {
     await Future.delayed(const Duration(milliseconds: 500));
     loading = false;
     setState(() {});
+  }
+
+  void playAlertSound(int score) async {
+    if (score <= 0) return;
+    final audio.AudioPlayer audioPlayer = audio.AudioPlayer();
+
+    late String alertSoundPath;
+    alertSoundPath = 'level1.mp3';
+
+    await audioPlayer.play(audio.AssetSource(alertSoundPath));
+
+    debugPrint("Alert sound played successfully.");
   }
 }
