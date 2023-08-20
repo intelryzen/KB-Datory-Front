@@ -1,7 +1,6 @@
 # Future Finance A.I. Challenge ( KBeep 팀)
-## 팀원: 신백록, 우승식, 김종해
-##
-   
+## 팀원: 신백록, 우승식, 김종해  
+  
 ## 백엔드 프레임워크: Fastapi, Mysql
 Github: https://github.com/intelryzen/KB-Datory
 
