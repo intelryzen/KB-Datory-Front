@@ -11,7 +11,6 @@ class Recorder {
   int fileSize = 0;
 
   int time = 0;
-  final String _serverUrl = "https://local";
   late Timer _timer;
 
   Recorder() {

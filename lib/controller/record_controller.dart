@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:aitest/main.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -10,9 +12,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
+import 'package:audioplayers/audioplayers.dart' as audio;
 
 class RecordController extends GetxController {
-  final String _serverUrl = "http://192.168.0.12:8080/api/score/";
+  final audio.AudioPlayer audioPlayer = audio.AudioPlayer();
+  final String _serverUrl = "http://$localhost/api/score/";
   final String myPhone = "010-5122-4138";
   late String targetPhone;
   final FlutterSoundRecorder _mRecorder = FlutterSoundRecorder();
@@ -105,7 +109,7 @@ class RecordController extends GetxController {
       recordingTime++;
 
       // 15 초마다 요청
-      if (recordingTime % 15 == 0 && sending == false) {
+      if (recordingTime % 3 == 0 && sending == false) {
         writeChunksToFile(_pcmFilePath!).then((lastIndex) async {
           if (lastIndex > 0) {
             bool completedConverted =
@@ -122,6 +126,20 @@ class RecordController extends GetxController {
         });
       }
     }
+  }
+
+  void playAlertSound(int score) async {
+    if (score < 50) return;
+    late String alertSoundPath;
+    if (score >= 70) {
+      alertSoundPath = 'level2.mp3';
+    } else {
+      alertSoundPath = 'level1.mp3';
+    }
+
+    await audioPlayer.play(audio.AssetSource(alertSoundPath));
+
+    debugPrint("Alert sound played successfully.");
   }
 
   Future<int> writeChunksToFile(String filePath) async {
@@ -157,6 +175,7 @@ class RecordController extends GetxController {
         int score = jsonDecode(json)["score"];
         print("보이스피싱 결과 수신: $score");
         this.score = score.obs;
+        playAlertSound(score);
         return true;
       }
     } catch (error) {

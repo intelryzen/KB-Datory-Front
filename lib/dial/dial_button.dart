@@ -27,8 +27,10 @@ class DialButton extends StatelessWidget {
   final subContent;
 
   Color getPhishingColor(int score) {
-    if (score >= 80) {
+    if (score >= 70) {
       return const Color(0xfffe463a);
+    }  else if (score >= 50) {
+      return  Colors.amber;
     } else
       return Colors.grey.withOpacity(0.3);
   }

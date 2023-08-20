@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:aitest/controller/record_controller.dart';
+import 'package:aitest/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -23,7 +24,7 @@ class CallScreen extends StatefulWidget {
 }
 
 class _CallScreenState extends State<CallScreen> {
-  final String _serverUrl = "http://192.168.0.12:8080/api/check-phone/";
+  final String _serverUrl = "http://$localhost/api/check-phone/";
 
   final RecordController recordController = Get.find();
   bool loading = true;
