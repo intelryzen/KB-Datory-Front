@@ -16,7 +16,7 @@ import 'package:audioplayers/audioplayers.dart' as audio;
 
 class RecordController extends GetxController {
   final audio.AudioPlayer audioPlayer = audio.AudioPlayer();
-  final String _serverUrl = "http://$localhost/api/score/";
+  final String _serverUrl = "http://$localhost/api/prob/";
   final String myPhone = "010-5122-4138";
   late String targetPhone;
   final FlutterSoundRecorder _mRecorder = FlutterSoundRecorder();
@@ -109,7 +109,7 @@ class RecordController extends GetxController {
       recordingTime++;
 
       // 15 초마다 요청
-      if (recordingTime % 3 == 0 && sending == false) {
+      if (recordingTime % 5 == 0 && sending == false) {
         writeChunksToFile(_pcmFilePath!).then((lastIndex) async {
           if (lastIndex > 0) {
             bool completedConverted =
@@ -168,11 +168,12 @@ class RecordController extends GetxController {
       var request = http.MultipartRequest('POST', Uri.parse(_serverUrl));
       request.fields["my_phone"] = myPhone;
       request.fields["target_phone"] = targetPhone;
-      request.files.add(await http.MultipartFile.fromPath('file', path));
+      // request.files.add(await http.MultipartFile.fromPath('file', path));
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 200) {
         String json = await response.stream.bytesToString();
-        int score = jsonDecode(json)["score"];
+        print(json);
+        int score = (jsonDecode(json)["prob"] * 100).toInt();
         print("보이스피싱 결과 수신: $score");
         this.score = score.obs;
         playAlertSound(score);

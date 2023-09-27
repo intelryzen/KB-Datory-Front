@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'controller/record_controller.dart';
 
-// String localhost = "192.168.0.16:8080";
-String localhost = "192.168.0.50:8000";
+String localhost = "192.168.0.12:8080";
+// String localhost = "192.168.0.50:8000";
 
 void main() {
   runApp(const MyApp());
